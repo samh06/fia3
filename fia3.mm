@@ -1,6 +1,6 @@
 <map version="freeplane 1.9.13">
 <!--To view this file, download free mind mapping software Freeplane from https://www.freeplane.org -->
-<node LOCALIZED_TEXT="new_mindmap" FOLDED="false" ID="ID_696401721" CREATED="1610381621824" MODIFIED="1610381621824" STYLE="oval">
+<node TEXT="FIA3" FOLDED="false" ID="ID_696401721" CREATED="1610381621824" MODIFIED="1689208536945" STYLE="oval">
 <font SIZE="18"/>
 <hook NAME="MapStyle">
     <properties edgeColorConfiguration="#808080ff,#ff0000ff,#0000ffff,#00ff00ff,#ff00ffff,#00ffffff,#7c0000ff,#00007cff,#007c00ff,#7c007cff,#007c7cff,#7c7c00ff" fit_to_viewport="false" associatedTemplateLocation="template:/standard-1.6.mm"/>
@@ -68,6 +68,26 @@
 </stylenode>
 </map_styles>
 </hook>
-<hook NAME="AutomaticEdgeColor" COUNTER="0" RULE="ON_BRANCH_CREATION"/>
+<hook NAME="AutomaticEdgeColor" COUNTER="4" RULE="ON_BRANCH_CREATION"/>
+<node TEXT="Retrieving and Comprehending" LOCALIZED_STYLE_REF="AutomaticLayout.level,1" POSITION="right" ID="ID_1527915581" CREATED="1689208483365" MODIFIED="1689208573610" HGAP_QUANTITY="23 pt" VSHIFT_QUANTITY="-160.5 pt">
+<edge COLOR="#ff0000"/>
+<node TEXT="Recognition of Elements" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_606965741" CREATED="1689208682364" MODIFIED="1689208724122"/>
+<node TEXT="Explanation of Programming Elements" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_1266526073" CREATED="1689208694199" MODIFIED="1689208724109"/>
+</node>
+<node TEXT="Analysing" LOCALIZED_STYLE_REF="AutomaticLayout.level,1" POSITION="left" ID="ID_656054635" CREATED="1689208493058" MODIFIED="1689208558824" HGAP_QUANTITY="23 pt" VSHIFT_QUANTITY="-120 pt">
+<edge COLOR="#0000ff"/>
+<node TEXT="Technical Proposal" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_603004560" CREATED="1689208538829" MODIFIED="1689208724122"/>
+<node TEXT="Requirements" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_1491811237" CREATED="1689208580567" MODIFIED="1689208724122"/>
+</node>
+<node TEXT="Synthesising" LOCALIZED_STYLE_REF="AutomaticLayout.level,1" POSITION="right" ID="ID_633665862" CREATED="1689208504247" MODIFIED="1689208573596" HGAP_QUANTITY="19.25 pt" VSHIFT_QUANTITY="69 pt">
+<edge COLOR="#00ff00"/>
+<node TEXT="Determine Components" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_974551692" CREATED="1689208631365" MODIFIED="1689208724122"/>
+<node TEXT="Generate Components" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_690068513" CREATED="1689208644198" MODIFIED="1689208724122"/>
+</node>
+<node TEXT="Evaluating" LOCALIZED_STYLE_REF="AutomaticLayout.level,1" POSITION="left" ID="ID_895056083" CREATED="1689208521718" MODIFIED="1689208573610" HGAP_QUANTITY="-0.25 pt" VSHIFT_QUANTITY="66 pt">
+<edge COLOR="#ff00ff"/>
+<node TEXT="Mode-Appropriate Features" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_1920447219" CREATED="1689208596200" MODIFIED="1689208724122"/>
+<node TEXT="Impacts" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" ID="ID_530208353" CREATED="1689208625798" MODIFIED="1689208724122"/>
+</node>
 </node>
 </map>
