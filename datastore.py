@@ -14,7 +14,21 @@ class DataStore:
 
     def retrieve_patients(self):
         self.cursor.execute("select id from patient")
-
+        patient_holder = []
         for id in self.cursor.fetchall():
             self.cursor.execute(f'select * from patient WHERE "id" = ?', id)
-            return self.cursor.fetchall()
+            patient_holder.append(self.cursor.fetchall()[0])
+        return patient_holder
+
+    def retrieve_patient(self, index: str):
+        patients = self.retrieve_patients()
+        id: int
+        start_index = index.find("[")
+        end_index = index.find("]")
+
+        # Extract the number substring
+        id = int(index[start_index+1:end_index])
+        for patient in patients:
+            if id == patient[0]:
+                return patient
+        return None
