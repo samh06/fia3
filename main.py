@@ -13,7 +13,6 @@ class MainWindow():
         self.main_win = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.main_win)
-        self.ui.pg2_combo.addItem(" ")
         self.ui.home_button.pressed.connect(self.moved_page)
 
         self.pg2_combobox()
@@ -24,7 +23,7 @@ class MainWindow():
                 self.pg2_combobox)  # Disconnect the signal temporarily
         except TypeError:
             # This occurs cause it isnt connected on first run, not something to worry about
-            pass
+            self.display_patient(self.data_store.retrieve_patient(0))
 
         patients = self.data_store.retrieve_patients()
 
@@ -40,7 +39,7 @@ class MainWindow():
         index = self.ui.pg2_combo.findText(current_text)
         if index != -1:
             self.ui.pg2_combo.setCurrentIndex(index)
-            print(self.data_store.retrieve_patient(
+            self.display_patient(self.data_store.retrieve_patient(
                 self.ui.pg2_combo.currentText()))
         else:
             self.ui.pg2_combo.setCurrentIndex(0)
@@ -53,6 +52,15 @@ class MainWindow():
                 self.ui.stackedWidget.setCurrentWidget(self.ui.page_2)
                 self.ui.pg2_combo.addItem("Items")
                 self.ui.pg2_combo.addItem("Items2")
+
+    def display_patient(self, patient):
+        if not patient == None:
+            self.ui.pg2_name_edit.setText(patient[1])
+            self.ui.pg2_dob_edit.setText(patient[2])
+            self.ui.pg2_add_edit.setText(patient[3])
+            self.ui.pg2_post_edit.setText(patient[4])
+            self.ui.pg2_hei_edit.setText(str(patient[5]))
+            self.ui.pg2_wei_edit.setText(str(patient[6]))
 
 
 if __name__ == '__main__':

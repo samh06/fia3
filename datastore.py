@@ -20,14 +20,16 @@ class DataStore:
             patient_holder.append(self.cursor.fetchall()[0])
         return patient_holder
 
-    def retrieve_patient(self, index: str):
+    def retrieve_patient(self, index: str | int):
         patients = self.retrieve_patients()
         id: int
-        start_index = index.find("[")
-        end_index = index.find("]")
+        if type(index) == int:
+            id = index
+        else:
+            start_index = index.find("[")
+            end_index = index.find("]")
 
-        # Extract the number substring
-        id = int(index[start_index+1:end_index])
+            id = int(index[start_index+1:end_index])
         for patient in patients:
             if id == patient[0]:
                 return patient
