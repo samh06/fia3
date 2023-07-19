@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 
 from datastore import DataStore
 from Ui_Generated import Ui_MainWindow
@@ -11,6 +11,8 @@ class MainWindow():
         self.main_win = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.main_win)
+        self.ui.patient_1_combo_autofill.currentIndexChanged.connect(
+            self.pg2_combobox)
         self.connect_bar()
 
         self.pg2_combobox()
@@ -54,13 +56,12 @@ class MainWindow():
             self.display_patient(
                 self.data_store.retrieve_patient(current_text))
         else:
+            self.show_error_popup(
+                "Selected value no longer in database, please try again.")
             self.ui.patient_1_combo_autofill.setCurrentIndex(0)
 
         # Re-enable the signal
         self.ui.patient_1_combo_autofill.blockSignals(False)
-
-        self.ui.patient_1_combo_autofill.currentIndexChanged.connect(
-            self.pg2_combobox)
 
     def menu_select(self, button: QPushButton):
         self.ui.content.setCurrentWidget(getattr(
@@ -75,6 +76,14 @@ class MainWindow():
             self.ui.patient_1_post_edit.setText(patient[4])
             self.ui.patient_1_hei_edit.setText(str(patient[5]))
             self.ui.patient_1_wei_edit.setText(str(patient[6]))
+
+    @staticmethod
+    def show_error_popup(message):
+        error_popup = QMessageBox()
+        error_popup.setIcon(QMessageBox.Critical)
+        error_popup.setWindowTitle("Error")
+        error_popup.setText(message)
+        error_popup.exec_()
 
 
 if __name__ == '__main__':
