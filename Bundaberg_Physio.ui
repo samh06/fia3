@@ -36,6 +36,9 @@
       <property name="text">
        <string>Pg2</string>
       </property>
+      <property name="nxt_page" stdset="0">
+       <string>page_2</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="page_2">

@@ -59,3 +59,4 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.home_button.setText(_translate("MainWindow", "Pg2"))
+        self.home_button.setProperty("nxt_page", _translate("MainWindow", "page_2"))
