@@ -11,15 +11,21 @@ class MainWindow():
         self.main_win = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.main_win)
-        self.ui.home_button.pressed.connect(
-            lambda *args, b=self.ui.home_button: self.menu_select(b))
+        self.connect_bar()
 
         self.pg2_combobox()
 
-    def pg2_combobox(self):
-        # Disconnect the signal temporarily
-        self.ui.pg2_combo.currentIndexChanged.disconnect(self.pg2_combobox)
+    def connect_bar(self):
+        buttons = [self.ui.home_title_button, self.ui.patients_title_button,
+                   self.ui.type_title_button, self.ui.taken_title_button,
+                   self.ui.taken_sidebar_1, self.ui.taken_sidebar_2,
+                   self.ui.patients_sidebar_1, self.ui.patients_sidebar_2,
+                   self.ui.types_sidebar_1, self.ui.types_sidebar_2]
 
+        for button in buttons:
+            button.pressed.connect(lambda *args, b=button: self.menu_select(b))
+
+    def pg2_combobox(self):
         try:
             self.display_patient(self.data_store.retrieve_patient(0))
         except TypeError:
@@ -27,47 +33,48 @@ class MainWindow():
             pass
 
         patients = self.data_store.retrieve_patients()
-        current_text = self.ui.pg2_combo.currentText()
+        current_text = self.ui.patient_1_combo_autofill.currentText()
 
         # Block signals during the update process
-        self.ui.pg2_combo.blockSignals(True)
+        self.ui.patient_1_combo_autofill.blockSignals(True)
 
-        self.ui.pg2_combo.clear()
+        self.ui.patient_1_combo_autofill.clear()
 
         # Construct a list of patient items
         patient_items = [
             f"[{patient[0]}] {patient[1]}" for patient in patients]
 
         # Add the items to the combo box all at once
-        self.ui.pg2_combo.addItems(patient_items)
+        self.ui.patient_1_combo_autofill.addItems(patient_items)
 
         # Set the previously selected item if it still exists in the new items
-        index = self.ui.pg2_combo.findText(current_text)
+        index = self.ui.patient_1_combo_autofill.findText(current_text)
         if index != -1:
-            self.ui.pg2_combo.setCurrentIndex(index)
+            self.ui.patient_1_combo_autofill.setCurrentIndex(index)
             self.display_patient(
                 self.data_store.retrieve_patient(current_text))
         else:
-            self.ui.pg2_combo.setCurrentIndex(0)
+            self.ui.patient_1_combo_autofill.setCurrentIndex(0)
 
         # Re-enable the signal
-        self.ui.pg2_combo.blockSignals(False)
+        self.ui.patient_1_combo_autofill.blockSignals(False)
 
-        self.ui.pg2_combo.currentIndexChanged.connect(self.pg2_combobox)
+        self.ui.patient_1_combo_autofill.currentIndexChanged.connect(
+            self.pg2_combobox)
 
     def menu_select(self, button: QPushButton):
-        self.ui.stackedWidget.setCurrentWidget(getattr(
+        self.ui.content.setCurrentWidget(getattr(
             self.ui, str(button.property(button.dynamicPropertyNames()[
                 0].data().decode("utf-8")))))
 
     def display_patient(self, patient):
         if not patient == None:
-            self.ui.pg2_name_edit.setText(patient[1])
-            self.ui.pg2_dob_edit.setText(patient[2])
-            self.ui.pg2_add_edit.setText(patient[3])
-            self.ui.pg2_post_edit.setText(patient[4])
-            self.ui.pg2_hei_edit.setText(str(patient[5]))
-            self.ui.pg2_wei_edit.setText(str(patient[6]))
+            self.ui.patient_1_name_edit.setText(patient[1])
+            self.ui.patient_1_DOB_edit.setText(patient[2])
+            self.ui.patient_1_add_edit.setText(patient[3])
+            self.ui.patient_1_post_edit.setText(patient[4])
+            self.ui.patient_1_hei_edit.setText(str(patient[5]))
+            self.ui.patient_1_wei_edit.setText(str(patient[6]))
 
 
 if __name__ == '__main__':
