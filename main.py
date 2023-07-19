@@ -94,13 +94,12 @@ class MainWindow():
             self.ui, f"{buttonName[0]}_{buttonName[1]}_{'2' if buttonName[2] == '1' else '1'}").setEnabled(True)
 
     def display_patient(self, patient):
-        if not patient == None:
-            self.ui.patient_1_name_edit.setText(patient[1])
-            self.ui.patient_1_DOB_edit.setText(patient[2])
-            self.ui.patient_1_add_edit.setText(patient[3])
-            self.ui.patient_1_post_edit.setText(patient[4])
-            self.ui.patient_1_hei_edit.setText(str(patient[5]))
-            self.ui.patient_1_wei_edit.setText(str(patient[6]))
+        self.ui.patient_1_name_edit.setText(patient[1])
+        self.ui.patient_1_DOB_edit.setText(patient[2])
+        self.ui.patient_1_add_edit.setText(patient[3])
+        self.ui.patient_1_post_edit.setText(patient[4])
+        self.ui.patient_1_hei_edit.setText(str(patient[5]))
+        self.ui.patient_1_wei_edit.setText(str(patient[6]))
 
     @staticmethod
     def show_error_popup(message):

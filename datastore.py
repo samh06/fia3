@@ -33,4 +33,4 @@ class DataStore:
         for patient in patients:
             if id == patient[0]:
                 return patient
-        return None
+        return patients[0]
