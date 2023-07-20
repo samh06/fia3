@@ -83,25 +83,17 @@ class MainWindow():
 
     def patient_1_radio_clicked(self):
         patient_insert_enabled = self.ui.patient_1_insert_radio.isChecked()
-        patient_update_enabled = self.ui.patient_1_update_radio.isChecked()
         patient_remove_enabled = self.ui.patient_1_remove_radio.isChecked()
 
-        self.ui.patient_1_combo_autofill.setEnabled(
-            patient_remove_enabled or patient_update_enabled)
-        self.ui.patient_1_name_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
-        self.ui.patient_1_studnum_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
-        self.ui.patient_1_DOB_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
-        self.ui.patient_1_add_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
-        self.ui.patient_1_post_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
-        self.ui.patient_1_hei_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
-        self.ui.patient_1_wei_edit.setEnabled(
-            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_combo_autofill.setDisabled(patient_insert_enabled)
+        self.ui.patient_1_name_edit.setDisabled(patient_remove_enabled)
+        self.ui.patient_1_studnum_edit.setDisabled(patient_remove_enabled)
+        self.ui.patient_1_DOB_edit.setDisabled(patient_remove_enabled)
+        self.ui.patient_1_add_edit.setDisabled(patient_remove_enabled)
+        self.ui.patient_1_post_edit.setDisabled(patient_remove_enabled)
+        self.ui.patient_1_hei_edit.setDisabled(patient_remove_enabled)
+        self.ui.patient_1_wei_edit.setDisabled(patient_remove_enabled)
+
         self.change_patient_1_edits([], True) if patient_insert_enabled else self.change_patient_1_edits(
             self.data_store.retrieve_patient(self.ui.patient_1_combo_autofill.currentText()))
 
@@ -170,6 +162,9 @@ class MainWindow():
             if radio_button.isChecked():
                 self.data_store.patient_push_to_db(patient=patient, mode=mode)
                 self.patient_1_combobox()
+    #############################################
+    ########## PATIENT 2 ########################
+    #############################################
 
     #############################################
     ########## MISC #############################
