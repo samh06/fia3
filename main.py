@@ -14,17 +14,71 @@ class MainWindow():
         self.menu_select(self.ui.home_title_button)
 
         self.ui.patient_1_combo_autofill.currentIndexChanged.connect(
-            self.pg2_combobox)
-        self.ui.patient_1_insert_radio.clicked.connect(self.radio)
-        self.ui.patient_1_remove_radio.clicked.connect(self.radio)
-        self.ui.patient_1_update_radio.clicked.connect(self.radio)
+            self.patient_1_combobox)
+        self.ui.patient_1_insert_radio.clicked.connect(
+            self.patient_1_radio_clicked)
+        self.ui.patient_1_remove_radio.clicked.connect(
+            self.patient_1_radio_clicked)
+        self.ui.patient_1_update_radio.clicked.connect(
+            self.patient_1_radio_clicked)
 
         self.connect_menu()
         self.connect_side()
-        self.radio()
-        self.pg2_combobox()
+        self.patient_1_radio_clicked()
+        self.patient_1_combobox()
 
-    def radio(self):
+    #############################################
+    ########## MENUBAR ##########################
+    #############################################
+
+    def connect_menu(self):
+        buttons = [self.ui.home_title_button, self.ui.patients_title_button,
+                   self.ui.type_title_button, self.ui.taken_title_button]
+
+        for button in buttons:
+            button.pressed.connect(lambda *args, b=button: self.menu_select(b))
+
+    def menu_select(self, button: QPushButton):
+        pg = str(button.property(
+            button.dynamicPropertyNames()[0].data().decode("utf-8")))
+
+        self.ui.sideBar.setCurrentWidget(
+            getattr(self.ui, f"{pg.split('_')[0]}_side"))
+        self.ui.content.setCurrentWidget(getattr(self.ui, pg))
+
+        self.side_select(getattr(self.ui, f"{pg.split('_')[0]}_sidebar_1"))
+
+    #############################################
+    ########## SIDEBAR ##########################
+    #############################################
+
+    def connect_side(self):
+        buttons = [self.ui.taken_sidebar_1, self.ui.taken_sidebar_2,
+                   self.ui.patients_sidebar_1, self.ui.patients_sidebar_2,
+                   self.ui.types_sidebar_1, self.ui.types_sidebar_2]
+
+        for button in buttons:
+            button.pressed.connect(lambda *args, b=button: self.side_select(b))
+
+    def side_select(self, button: QPushButton):
+        button.setEnabled(False)
+
+        buttonName = button.objectName().split("_")
+        try:
+            self.ui.content.setCurrentWidget(
+                getattr(self.ui, f"{buttonName[0]}_{buttonName[2]}_content"))
+        except AttributeError:
+            # This occurs when going to the home screen because it has 1 section, this is fine.
+            self.ui.content.setCurrentWidget(self.ui.home_content)
+
+        getattr(
+            self.ui, f"{buttonName[0]}_{buttonName[1]}_{'2' if buttonName[2] == '1' else '1'}").setEnabled(True)
+
+    #############################################
+    ########## PATIENT 1 ########################
+    #############################################
+
+    def patient_1_radio_clicked(self):
         patient_insert_enabled = self.ui.patient_1_insert_radio.isChecked()
         patient_update_enabled = self.ui.patient_1_update_radio.isChecked()
         patient_remove_enabled = self.ui.patient_1_remove_radio.isChecked()
@@ -45,25 +99,10 @@ class MainWindow():
             patient_insert_enabled or patient_update_enabled)
         self.ui.patient_1_wei_edit.setEnabled(
             patient_insert_enabled or patient_update_enabled)
-        self.display_patient([], True) if patient_insert_enabled else self.display_patient(
+        self.change_patient_1_edits([], True) if patient_insert_enabled else self.change_patient_1_edits(
             self.data_store.retrieve_patient(self.ui.patient_1_combo_autofill.currentText()))
 
-    def connect_menu(self):
-        buttons = [self.ui.home_title_button, self.ui.patients_title_button,
-                   self.ui.type_title_button, self.ui.taken_title_button]
-
-        for button in buttons:
-            button.pressed.connect(lambda *args, b=button: self.menu_select(b))
-
-    def connect_side(self):
-        buttons = [self.ui.taken_sidebar_1, self.ui.taken_sidebar_2,
-                   self.ui.patients_sidebar_1, self.ui.patients_sidebar_2,
-                   self.ui.types_sidebar_1, self.ui.types_sidebar_2]
-
-        for button in buttons:
-            button.pressed.connect(lambda *args, b=button: self.side_select(b))
-
-    def pg2_combobox(self):
+    def patient_1_combobox(self):
         patients = self.data_store.retrieve_patients()
         current_text = self.ui.patient_1_combo_autofill.currentText()
 
@@ -83,7 +122,7 @@ class MainWindow():
         index = self.ui.patient_1_combo_autofill.findText(current_text)
         if index != -1:
             self.ui.patient_1_combo_autofill.setCurrentIndex(index)
-            self.display_patient(
+            self.change_patient_1_edits(
                 self.data_store.retrieve_patient(current_text))
         else:
             if self.ui.content.currentWidget() != self.ui.home_content:
@@ -94,39 +133,19 @@ class MainWindow():
         # Re-enable the signal
         self.ui.patient_1_combo_autofill.blockSignals(False)
 
-    def menu_select(self, button: QPushButton):
-        pg = str(button.property(
-            button.dynamicPropertyNames()[0].data().decode("utf-8")))
-
-        self.ui.sideBar.setCurrentWidget(
-            getattr(self.ui, f"{pg.split('_')[0]}_side"))
-        self.ui.content.setCurrentWidget(getattr(self.ui, pg))
-
-        self.side_select(getattr(self.ui, f"{pg.split('_')[0]}_sidebar_1"))
-
-    def side_select(self, button: QPushButton):
-        button.setEnabled(False)
-
-        buttonName = button.objectName().split("_")
-        try:
-            self.ui.content.setCurrentWidget(
-                getattr(self.ui, f"{buttonName[0]}_{buttonName[2]}_content"))
-        except AttributeError:
-            # This occurs when going to the home screen because it has 1 section, this is fine.
-            self.ui.content.setCurrentWidget(self.ui.home_content)
-
-        getattr(
-            self.ui, f"{buttonName[0]}_{buttonName[1]}_{'2' if buttonName[2] == '1' else '1'}").setEnabled(True)
-
-    def display_patient(self, patient, clear=False):
+    def change_patient_1_edits(self, patient, clear=False):
         if clear:
-            patient = "       "
+            patient = ["", "", "", "", "", "", "",]
         self.ui.patient_1_name_edit.setText(patient[1])
         self.ui.patient_1_DOB_edit.setText(patient[2])
         self.ui.patient_1_add_edit.setText(patient[3])
         self.ui.patient_1_post_edit.setText(patient[4])
         self.ui.patient_1_hei_edit.setText(str(patient[5]))
         self.ui.patient_1_wei_edit.setText(str(patient[6]))
+
+    #############################################
+    ########## MISC #############################
+    #############################################
 
     @staticmethod
     def show_error_popup(message):
