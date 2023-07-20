@@ -217,11 +217,15 @@ class MainWindow():
         self.ui.patients_2_weight_recieving.setText(str(patient[6]))
 
     #############################################
-    ########## TAKEN 1 ##########################
+    ########## TAKEN 1 ###########(New App)######
     #############################################
 
     #############################################
-    ########## TAKEN 2 ##########################
+    ########## TAKEN 2 ##########(View App)######
+    #############################################
+
+    #############################################
+    ########## TAKEN 3 ######(New Test)##########
     #############################################
 
     #############################################
@@ -265,11 +269,11 @@ class MainWindow():
         self.ui.types_2_code_combobox.blockSignals(False)
 
     def change_type_2_text(self, patient):
-        print(patient)
         self.ui.types_2_code_label.setText(patient[1])
         self.ui.types_2_name_label.setText(patient[2])
         self.ui.types_2_description_label.setText(patient[3])
         self.ui.types_2_price_label.setText(f"${str(patient[4])}")
+
     #############################################
     ########## MISC #############################
     #############################################

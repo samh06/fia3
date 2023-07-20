@@ -12,12 +12,12 @@ class DataStore:
     def __del__(self):
         self.db.close()
 
+    #############################################
+    ########## PATIENTS #########################
+    #############################################
+
     def retrieve_patients(self):
         self.cursor.execute("select * from patient")
-        return self.cursor.fetchall()
-
-    def retrieve_types(self):
-        self.cursor.execute("select * from type")
         return self.cursor.fetchall()
 
     def retrieve_patient(self, index: str | int):
@@ -34,21 +34,6 @@ class DataStore:
             if id == patient[0]:
                 return patient
         return patients[0]
-
-    def retrieve_type(self, index: str | int):
-        tests = self.retrieve_types()
-        id: int
-        if type(index) == int:
-            id = index
-        else:
-            start_index = index.find("[")
-            end_index = index.find("]")
-
-            id = int(index[start_index+1:end_index])
-        for test in tests:
-            if id == test[0]:
-                return test
-        return tests[0]
 
     def patient_push_to_db(self, patient: list, mode: str):
         id: int
@@ -95,7 +80,29 @@ class DataStore:
         self.db.commit()
 
     def remove_patient(self, id):
-        print(id)
         self.cursor.execute('''DELETE FROM patient
 WHERE id = :id;''', {"id": id})
         self.db.commit()
+
+    #############################################
+    ########## TYPES ############################
+    #############################################
+
+    def retrieve_types(self):
+        self.cursor.execute("select * from type")
+        return self.cursor.fetchall()
+
+    def retrieve_type(self, index: str | int):
+        tests = self.retrieve_types()
+        id: int
+        if type(index) == int:
+            id = index
+        else:
+            start_index = index.find("[")
+            end_index = index.find("]")
+
+            id = int(index[start_index+1:end_index])
+        for test in tests:
+            if id == test[0]:
+                return test
+        return tests[0]
