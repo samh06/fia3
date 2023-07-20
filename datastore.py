@@ -34,3 +34,53 @@ class DataStore:
             if id == patient[0]:
                 return patient
         return patients[0]
+
+    def patient_push_to_db(self, patient: list, mode: str):
+        id: int
+        if type(patient[0]) == int:
+            id = patient[0]
+        else:
+            start_index = patient[0].find("[")
+            end_index = patient[0].find("]")
+
+            id = int(patient[0][start_index+1:end_index])
+            print(id)
+
+        if mode == "update":
+            self.update_patient(id, patient)
+        elif mode == "insert":
+            self.insert_patient(patient)
+        else:
+            self.remove_patient(id)
+
+    def update_patient(self, id, patient):
+        self.cursor.execute("""
+                    UPDATE Patient
+                    SET
+                        name = :name,
+                        dob = :dob,
+                        address = :add,
+                        Post = :post,
+                        height = :hei,
+                        weight = :wei
+                    WHERE
+                        id = :id;
+                                    """, {"id": id, "name": patient[1], "dob": patient[2],
+                                          "add": patient[3], "post": patient[4],
+                                          "hei": patient[5], "wei": patient[6]})
+        self.db.commit()
+
+    def insert_patient(self, patient):
+        self.cursor.execute("""
+            INSERT INTO patient (name, dob, address, post, height, weight)
+            VALUES (:name, :dob, :address, :post, :height, :weight)""",
+                            {"name": patient[1], "dob": patient[2],
+                             "address": patient[3], "post": patient[4],
+                             "height": patient[5], "weight": patient[6]})
+        self.db.commit()
+
+    def remove_patient(self, id):
+        print(id)
+        self.cursor.execute('''DELETE FROM patient
+WHERE id = :id;''', {"id": id})
+        self.db.commit()

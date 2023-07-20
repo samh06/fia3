@@ -22,6 +22,9 @@ class MainWindow():
         self.ui.patient_1_update_radio.clicked.connect(
             self.patient_1_radio_clicked)
 
+        self.ui.patient_1_update_button.pressed.connect(
+            self.update_patient_1_data)
+
         self.connect_menu()
         self.connect_side()
         self.patient_1_radio_clicked()
@@ -126,14 +129,18 @@ class MainWindow():
                 self.data_store.retrieve_patient(current_text))
         else:
             if self.ui.content.currentWidget() != self.ui.home_content:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
+                if self.ui.patient_1_remove_radio.isChecked():
+                    self.show_error_popup("Successfully deleted patient")
+                else:
+                    self.show_error_popup(
+                        "Selected value no longer in database, please try again.")
                 self.ui.patient_1_combo_autofill.setCurrentIndex(0)
 
         # Re-enable the signal
         self.ui.patient_1_combo_autofill.blockSignals(False)
 
     def change_patient_1_edits(self, patient, clear=False):
+        print(patient)
         if clear:
             patient = ["", "", "", "", "", "", "",]
         self.ui.patient_1_name_edit.setText(patient[1])
@@ -142,6 +149,27 @@ class MainWindow():
         self.ui.patient_1_post_edit.setText(patient[4])
         self.ui.patient_1_hei_edit.setText(str(patient[5]))
         self.ui.patient_1_wei_edit.setText(str(patient[6]))
+
+    def update_patient_1_data(self):
+        patient = [self.ui.patient_1_combo_autofill.currentText(),
+                   self.ui.patient_1_name_edit.text(),
+                   self.ui.patient_1_DOB_edit.text(),
+                   self.ui.patient_1_add_edit.text(),
+                   self.ui.patient_1_post_edit.text(),
+                   int(self.ui.patient_1_hei_edit.text()),
+                   int(self.ui.patient_1_wei_edit.text())]
+
+        radio_button_modes = {
+            self.ui.patient_1_insert_radio: "insert",
+            self.ui.patient_1_update_radio: "update",
+            self.ui.patient_1_remove_radio: "remove"
+        }
+
+        # Check which radio button is checked
+        for radio_button, mode in radio_button_modes.items():
+            if radio_button.isChecked():
+                self.data_store.patient_push_to_db(patient=patient, mode=mode)
+                self.patient_1_combobox()
 
     #############################################
     ########## MISC #############################
