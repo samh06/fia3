@@ -15,6 +15,9 @@ class MainWindow():
 
         self.ui.patient_1_combo_autofill.currentIndexChanged.connect(
             self.patient_1_combobox)
+        self.ui.comboBox.currentIndexChanged.connect(
+            self.patient_2_combobox)
+
         self.ui.patient_1_insert_radio.clicked.connect(
             self.patient_1_radio_clicked)
         self.ui.patient_1_remove_radio.clicked.connect(
@@ -29,6 +32,7 @@ class MainWindow():
         self.connect_side()
         self.patient_1_radio_clicked()
         self.patient_1_combobox()
+        self.patient_2_combobox()
 
     #############################################
     ########## MENUBAR ##########################
@@ -162,9 +166,50 @@ class MainWindow():
             if radio_button.isChecked():
                 self.data_store.patient_push_to_db(patient=patient, mode=mode)
                 self.patient_1_combobox()
+
     #############################################
     ########## PATIENT 2 ########################
     #############################################
+
+    def patient_2_combobox(self):
+        patients = self.data_store.retrieve_patients()
+        current_text = self.ui.comboBox.currentText()
+
+        # Block signals during the update process
+        self.ui.comboBox.blockSignals(True)
+
+        self.ui.comboBox.clear()
+
+        # Construct a list of patient items
+        patient_items = [
+            f"[{patient[0]}] {patient[1]}" for patient in patients]
+
+        # Add the items to the combo box all at once
+        self.ui.comboBox.addItems(patient_items)
+
+        # Set the previously selected item if it still exists in the new items
+        index = self.ui.comboBox.findText(current_text)
+        if index != -1:
+            self.ui.comboBox.setCurrentIndex(index)
+            self.change_patient_2_text(
+                self.data_store.retrieve_patient(current_text))
+        else:
+            if self.ui.content.currentWidget() != self.ui.home_content:
+                self.show_error_popup(
+                    "Selected value no longer in database, please try again.")
+            self.ui.comboBox.setCurrentIndex(0)
+            self.change_patient_2_text(self.data_store.retrieve_patient(0))
+
+        # Re-enable the signal
+        self.ui.comboBox.blockSignals(False)
+
+    def change_patient_2_text(self, patient):
+        self.ui.patients_2_SNO_recieving.setText(patient[1])
+        self.ui.patients_2_DOB_title_recieving.setText(patient[2])
+        self.ui.patients_2_address_recieving.setText(patient[3])
+        self.ui.patients_2_POST_recieving.setText(patient[4])
+        self.ui.patients_2_height_recieving.setText(str(patient[5]))
+        self.ui.patients_2_weight_recieving.setText(str(patient[6]))
 
     #############################################
     ########## MISC #############################
