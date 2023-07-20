@@ -155,11 +155,11 @@
         <x>0</x>
         <y>10</y>
         <width>131</width>
-        <height>241</height>
+        <height>163</height>
        </rect>
       </property>
       <property name="text">
-       <string>Add Taken Test</string>
+       <string>Add New Appointment</string>
       </property>
       <property name="nxt_page" stdset="0">
        <string>taken_2_content</string>
@@ -169,13 +169,29 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>260</y>
+        <y>338</y>
         <width>131</width>
-        <height>241</height>
+        <height>163</height>
        </rect>
       </property>
       <property name="text">
-       <string>View Tests Taken</string>
+       <string>View Appointments</string>
+      </property>
+      <property name="nxt_page" stdset="0">
+       <string>taken_1_content</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="taken_sidebar_5">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>180</y>
+        <width>131</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add New Test</string>
       </property>
       <property name="nxt_page" stdset="0">
        <string>taken_1_content</string>
@@ -344,7 +360,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="home_content">
      <widget class="QLabel" name="home_content_title">
@@ -586,14 +602,14 @@
      <widget class="QLabel" name="patients_2_SNO_title">
       <property name="geometry">
        <rect>
-        <x>16</x>
+        <x>56</x>
         <y>170</y>
-        <width>91</width>
+        <width>51</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Student Number</string>
+       <string>Name</string>
       </property>
      </widget>
      <widget class="QLabel" name="patients_2_DOB_title">
@@ -794,7 +810,7 @@
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>170</y>
+        <y>180</y>
         <width>141</width>
         <height>16</height>
        </rect>
@@ -807,7 +823,7 @@
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>200</y>
+        <y>220</y>
         <width>141</width>
         <height>16</height>
        </rect>
@@ -980,6 +996,21 @@
       </property>
       <property name="text">
        <string>Results:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="taken_5_content">
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>100</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Taken_3</string>
       </property>
      </widget>
     </widget>

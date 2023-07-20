@@ -17,6 +17,8 @@ class MainWindow():
             self.patient_1_combobox)
         self.ui.comboBox.currentIndexChanged.connect(
             self.patient_2_combobox)
+        self.ui.types_2_code_combobox.currentIndexChanged.connect(
+            self.types_2_combobox)
 
         self.ui.patient_1_insert_radio.clicked.connect(
             self.patient_1_radio_clicked)
@@ -30,9 +32,11 @@ class MainWindow():
 
         self.connect_menu()
         self.connect_side()
+
         self.patient_1_radio_clicked()
         self.patient_1_combobox()
         self.patient_2_combobox()
+        self.types_2_combobox()
 
     #############################################
     ########## MENUBAR ##########################
@@ -60,26 +64,28 @@ class MainWindow():
     #############################################
 
     def connect_side(self):
-        buttons = [self.ui.taken_sidebar_1, self.ui.taken_sidebar_2,
-                   self.ui.patients_sidebar_1, self.ui.patients_sidebar_2,
-                   self.ui.types_sidebar_1, self.ui.types_sidebar_2]
+        buttons = []
+        for view in self.ui.sideBar.children():
+            if not view == self.ui.home_side:
+                for button in view.children():
+                    buttons.append(button)
 
         for button in buttons:
             button.pressed.connect(lambda *args, b=button: self.side_select(b))
 
-    def side_select(self, button: QPushButton):
-        button.setEnabled(False)
+    def side_select(self, sender: QPushButton):
+        for button in self.ui.sideBar.currentWidget().children():
+            button.setEnabled(True)
 
-        buttonName = button.objectName().split("_")
+        sender.setEnabled(False)
+
+        buttonName = sender.objectName().split("_")
         try:
             self.ui.content.setCurrentWidget(
                 getattr(self.ui, f"{buttonName[0]}_{buttonName[2]}_content"))
         except AttributeError:
             # This occurs when going to the home screen because it has 1 section, this is fine.
             self.ui.content.setCurrentWidget(self.ui.home_content)
-
-        getattr(
-            self.ui, f"{buttonName[0]}_{buttonName[1]}_{'2' if buttonName[2] == '1' else '1'}").setEnabled(True)
 
     #############################################
     ########## PATIENT 1 ########################
@@ -136,7 +142,6 @@ class MainWindow():
         self.ui.patient_1_combo_autofill.blockSignals(False)
 
     def change_patient_1_edits(self, patient, clear=False):
-        print(patient)
         if clear:
             patient = ["", "", "", "", "", "", "",]
         self.ui.patient_1_name_edit.setText(patient[1])
@@ -211,6 +216,60 @@ class MainWindow():
         self.ui.patients_2_height_recieving.setText(str(patient[5]))
         self.ui.patients_2_weight_recieving.setText(str(patient[6]))
 
+    #############################################
+    ########## TAKEN 1 ##########################
+    #############################################
+
+    #############################################
+    ########## TAKEN 2 ##########################
+    #############################################
+
+    #############################################
+    ########## TYPES 1 ##########################
+    #############################################
+
+    #############################################
+    ########## TYPES 2 ##########################
+    #############################################
+
+    def types_2_combobox(self):
+        tests = self.data_store.retrieve_types()
+        current_text = self.ui.types_2_code_combobox.currentText()
+
+        # Block signals during the update process
+        self.ui.types_2_code_combobox.blockSignals(True)
+
+        self.ui.types_2_code_combobox.clear()
+
+        # Construct a list of patient items
+        test_items = [
+            f"[{test[0]}] {test[1]}" for test in tests]
+
+        # Add the items to the combo box all at once
+        self.ui.types_2_code_combobox.addItems(test_items)
+
+        # Set the previously selected item if it still exists in the new items
+        index = self.ui.types_2_code_combobox.findText(current_text)
+        if index != -1:
+            self.ui.types_2_code_combobox.setCurrentIndex(index)
+            self.change_type_2_text(
+                self.data_store.retrieve_type(current_text))
+        else:
+            if self.ui.content.currentWidget() != self.ui.home_content:
+                self.show_error_popup(
+                    "Selected value no longer in database, please try again.")
+            self.ui.types_2_code_combobox.setCurrentIndex(0)
+            self.change_type_2_text(self.data_store.retrieve_type(0))
+
+        # Re-enable the signal
+        self.ui.types_2_code_combobox.blockSignals(False)
+
+    def change_type_2_text(self, patient):
+        print(patient)
+        self.ui.types_2_code_label.setText(patient[1])
+        self.ui.types_2_name_label.setText(patient[2])
+        self.ui.types_2_description_label.setText(patient[3])
+        self.ui.types_2_price_label.setText(f"${str(patient[4])}")
     #############################################
     ########## MISC #############################
     #############################################

@@ -13,12 +13,12 @@ class DataStore:
         self.db.close()
 
     def retrieve_patients(self):
-        self.cursor.execute("select id from patient")
-        patient_holder = []
-        for id in self.cursor.fetchall():
-            self.cursor.execute(f'select * from patient WHERE "id" = ?', id)
-            patient_holder.append(self.cursor.fetchall()[0])
-        return patient_holder
+        self.cursor.execute("select * from patient")
+        return self.cursor.fetchall()
+
+    def retrieve_types(self):
+        self.cursor.execute("select * from type")
+        return self.cursor.fetchall()
 
     def retrieve_patient(self, index: str | int):
         patients = self.retrieve_patients()
@@ -34,6 +34,21 @@ class DataStore:
             if id == patient[0]:
                 return patient
         return patients[0]
+
+    def retrieve_type(self, index: str | int):
+        tests = self.retrieve_types()
+        id: int
+        if type(index) == int:
+            id = index
+        else:
+            start_index = index.find("[")
+            end_index = index.find("]")
+
+            id = int(index[start_index+1:end_index])
+        for test in tests:
+            if id == test[0]:
+                return test
+        return tests[0]
 
     def patient_push_to_db(self, patient: list, mode: str):
         id: int
