@@ -15,11 +15,38 @@ class MainWindow():
 
         self.ui.patient_1_combo_autofill.currentIndexChanged.connect(
             self.pg2_combobox)
+        self.ui.patient_1_insert_radio.clicked.connect(self.radio)
+        self.ui.patient_1_remove_radio.clicked.connect(self.radio)
+        self.ui.patient_1_update_radio.clicked.connect(self.radio)
 
         self.connect_menu()
         self.connect_side()
-
+        self.radio()
         self.pg2_combobox()
+
+    def radio(self):
+        patient_insert_enabled = self.ui.patient_1_insert_radio.isChecked()
+        patient_update_enabled = self.ui.patient_1_update_radio.isChecked()
+        patient_remove_enabled = self.ui.patient_1_remove_radio.isChecked()
+
+        self.ui.patient_1_combo_autofill.setEnabled(
+            patient_remove_enabled or patient_update_enabled)
+        self.ui.patient_1_name_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_studnum_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_DOB_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_add_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_post_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_hei_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.ui.patient_1_wei_edit.setEnabled(
+            patient_insert_enabled or patient_update_enabled)
+        self.display_patient([], True) if patient_insert_enabled else self.display_patient(
+            self.data_store.retrieve_patient(self.ui.patient_1_combo_autofill.currentText()))
 
     def connect_menu(self):
         buttons = [self.ui.home_title_button, self.ui.patients_title_button,
@@ -37,8 +64,6 @@ class MainWindow():
             button.pressed.connect(lambda *args, b=button: self.side_select(b))
 
     def pg2_combobox(self):
-        self.display_patient(self.data_store.retrieve_patient(0))
-
         patients = self.data_store.retrieve_patients()
         current_text = self.ui.patient_1_combo_autofill.currentText()
 
@@ -93,7 +118,9 @@ class MainWindow():
         getattr(
             self.ui, f"{buttonName[0]}_{buttonName[1]}_{'2' if buttonName[2] == '1' else '1'}").setEnabled(True)
 
-    def display_patient(self, patient):
+    def display_patient(self, patient, clear=False):
+        if clear:
+            patient = "       "
         self.ui.patient_1_name_edit.setText(patient[1])
         self.ui.patient_1_DOB_edit.setText(patient[2])
         self.ui.patient_1_add_edit.setText(patient[3])
