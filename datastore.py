@@ -106,3 +106,47 @@ WHERE id = :id;''', {"id": id})
             if id == test[0]:
                 return test
         return tests[0]
+
+    def types_push_to_db(self, type: list, mode: str):
+        id: int
+        if type(type[0]) == int:
+            id = type[0]
+        else:
+            start_index = type[0].find("[")
+            end_index = type[0].find("]")
+
+            id = int(type[0][start_index+1:end_index])
+
+        if mode == "update":
+            self.update_type(id, type)
+        elif mode == "insert":
+            self.insert_type(type)
+        else:
+            self.remove_type(id)
+
+    def update_type(self, id, type):
+        self.cursor.execute("""
+                    UPDATE Type
+                    SET
+                        code = :code,
+                        name = :name,
+                        desc = :desc,
+                        cost = :cost
+                    WHERE
+                        id = :id;
+                                    """, {"id": id, "code": type[1], "name": type[2],
+                                          "desc": type[3], "cost": type[4]})
+        self.db.commit()
+
+    def insert_type(self, type):
+        self.cursor.execute("""
+            INSERT INTO type (code, name, desc, price)
+            VALUES (:code, :name, :desc, :price)""",
+                            {"code": type[1], "name": type[2],
+                             "desc": type[3], "price": type[4]})
+        self.db.commit()
+
+    def remove_type(self, id):
+        self.cursor.execute('''DELETE FROM type
+WHERE id = :id;''', {"id": id})
+        self.db.commit()

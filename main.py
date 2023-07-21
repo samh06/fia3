@@ -17,8 +17,17 @@ class MainWindow():
             self.patient_1_combobox)
         self.ui.comboBox.currentIndexChanged.connect(
             self.patient_2_combobox)
+        self.ui.types_1_combo_autofill.currentIndexChanged.connect(
+            self.types_1_combobox)
         self.ui.types_2_code_combobox.currentIndexChanged.connect(
             self.types_2_combobox)
+
+        self.ui.types_1_insert_radio.clicked.connect(
+            self.types_1_radio_clicked)
+        self.ui.types_1_remove_radio.clicked.connect(
+            self.types_1_radio_clicked)
+        self.ui.types_1_update_radio.clicked.connect(
+            self.types_1_radio_clicked)
 
         self.ui.patient_1_insert_radio.clicked.connect(
             self.patient_1_radio_clicked)
@@ -36,6 +45,8 @@ class MainWindow():
         self.patient_1_radio_clicked()
         self.patient_1_combobox()
         self.patient_2_combobox()
+        self.types_1_radio_clicked()
+        self.types_1_combobox()
         self.types_2_combobox()
 
     #############################################
@@ -231,7 +242,79 @@ class MainWindow():
     #############################################
     ########## TYPES 1 ##########################
     #############################################
+    def types_1_radio_clicked(self):
+        types_insert_enabled = self.ui.types_1_insert_radio.isChecked()
+        types_remove_enabled = self.ui.types_1_remove_radio.isChecked()
 
+        self.ui.types_1_combo_autofill.setDisabled(types_insert_enabled)
+        self.ui.types_1_name_edit.setDisabled(types_remove_enabled)
+        self.ui.types_1_code_edit.setDisabled(types_remove_enabled)
+        self.ui.types_1_description_edit.setDisabled(types_remove_enabled)
+        self.ui.types_1_price_edit.setDisabled(types_remove_enabled)
+
+        self.change_types_1_edits([], True) if types_insert_enabled else self.change_types_1_edits(
+            self.data_store.retrieve_type(self.ui.types_1_combo_autofill.currentText()))
+
+    def types_1_combobox(self):
+        types = self.data_store.retrieve_types()
+        current_text = self.ui.types_1_combo_autofill.currentText()
+
+        # Block signals during the update process
+        self.ui.types_1_combo_autofill.blockSignals(True)
+
+        self.ui.types_1_combo_autofill.clear()
+
+        # Construct a list of patient items
+        patient_items = [
+            f"[{type[0]}] {type[1]}" for type in types]
+
+        # Add the items to the combo box all at once
+        self.ui.types_1_combo_autofill.addItems(patient_items)
+
+        # Set the previously selected item if it still exists in the new items
+        index = self.ui.types_1_combo_autofill.findText(current_text)
+        if index != -1:
+            self.ui.types_1_combo_autofill.setCurrentIndex(index)
+            self.change_types_1_edits(
+                self.data_store.retrieve_type(current_text))
+        else:
+            if self.ui.content.currentWidget() != self.ui.home_content:
+                if self.ui.types_1_remove_radio.isChecked():
+                    self.show_error_popup("Successfully deleted patient")
+                else:
+                    self.show_error_popup(
+                        "Selected value no longer in database, please try again.")
+                self.ui.types_1_combo_autofill.setCurrentIndex(0)
+
+        # Re-enable the signal
+        self.ui.types_1_combo_autofill.blockSignals(False)
+
+    def change_types_1_edits(self, patient, clear=False):
+        if clear:
+            patient = ["", "", "", "", ""]
+        self.ui.types_1_name_edit.setText(patient[2])
+        self.ui.types_1_code_edit.setText(patient[1])
+        self.ui.types_1_description_edit.setPlainText(patient[3])
+        self.ui.types_1_price_edit.setText(str(patient[4]))
+
+    def update_types_1_data(self):
+        type = [self.ui.patient_1_combo_autofill.currentText(),
+                self.ui.types_1_name_edit.text(),
+                self.ui.types_1_code_edit.text(),
+                self.ui.types_1_description_edit.toPlainText(),
+                self.ui.types_1_price_edit.text()]
+
+        radio_button_modes = {
+            self.ui.types_1_insert_radio: "insert",
+            self.ui.types_1_update_radio: "update",
+            self.ui.types_1_remove_radio: "remove"
+        }
+
+        # Check which radio button is checked
+        for radio_button, mode in radio_button_modes.items():
+            if radio_button.isChecked():
+                self.data_store.type_push_to_db(patient=type, mode=mode)
+                self.types_1_combobox()
     #############################################
     ########## TYPES 2 ##########################
     #############################################
