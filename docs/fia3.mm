@@ -1,6 +1,6 @@
 <map version="freeplane 1.9.13">
 <!--To view this file, download free mind mapping software Freeplane from https://www.freeplane.org -->
-<node TEXT="FIA3" LOCALIZED_STYLE_REF="AutomaticLayout.level.root" FOLDED="false" ID="ID_696401721" CREATED="1610381621824" MODIFIED="1689302858280"><hook NAME="MapStyle" zoom="1.001">
+<node TEXT="FIA3" LOCALIZED_STYLE_REF="AutomaticLayout.level.root" FOLDED="false" ID="ID_696401721" CREATED="1610381621824" MODIFIED="1689302858280"><hook NAME="MapStyle" zoom="0.77">
     <properties edgeColorConfiguration="#808080ff,#ff0000ff,#0000ffff,#00ff00ff,#ff00ffff,#00ffffff,#7c0000ff,#00007cff,#007c00ff,#7c007cff,#007c7cff,#7c7c00ff" show_icon_for_attributes="true" associatedTemplateLocation="template:/standard-1.6.mm" show_note_icons="true" fit_to_viewport="false"/>
 
 <map_styles>
@@ -74,7 +74,7 @@
 <node TEXT="The four data elements in this project are the patient data element, the test types data element, the appointment data element and the appointment-type data element. The patient data element stores all of the data for the patients, like their age and contact details. The test types data element stores all of the tests that Bundaberg Physiology offers, like the test name, code, price and description. The appointment data element will store the relevant information for an appointment, like if their balance has been paid, who got the appointment, when it was, and what the results of that appointment were. The appointment-type data element stores a link between the appointment and test types, storing the ID of a test for the ID of a test type, to indicate what tests were done in an appointment." ID="ID_1486799305" CREATED="1677644166589" MODIFIED="1689303997352"/>
 </node>
 <node TEXT="Technical Proposal" ID="ID_1772920001" CREATED="1675380774597" MODIFIED="1675380781257">
-<node TEXT="Mind-map (this document)" ID="ID_1949811753" CREATED="1677644175107" MODIFIED="1679977398441"/>
+<node TEXT="Mind-map" ID="ID_1949811753" CREATED="1677644175107" MODIFIED="1689897212661"/>
 <node TEXT="Prescribed Criteria" ID="ID_1164052283" CREATED="1679977406302" MODIFIED="1679977421539"/>
 <node TEXT="Self-determined Criteria" ID="ID_551215880" CREATED="1679977407180" MODIFIED="1679977437842"/>
 <node TEXT="Tools and Languages" ID="ID_1593106323" CREATED="1689304036529" MODIFIED="1689304040817"/>
@@ -151,9 +151,9 @@
 <node TEXT="Analysis" POSITION="right" ID="ID_1893631324" CREATED="1675380345373" MODIFIED="1679977688519" HGAP_QUANTITY="21.5 pt" VSHIFT_QUANTITY="49.5 pt">
 <edge COLOR="#00ffff"/>
 <node TEXT="Programming Requirements" ID="ID_173884441" CREATED="1675381171125" MODIFIED="1675381175742">
-<node TEXT="The requirements for the program to be successful would be that firstly, programming elements described are implemented properly, secondly, being that the program is able to successfully save, retrieve, and edit the data structures described." ID="ID_572044311" CREATED="1675399072922" MODIFIED="1689304323096">
-<arrowlink DESTINATION="ID_576082470" STARTINCLINATION="-205.49999 pt;-48 pt;" ENDINCLINATION="-78.75 pt;3.75 pt;"/>
-<arrowlink DESTINATION="ID_904142471" STARTINCLINATION="-134.25 pt;-41.25 pt;" ENDINCLINATION="-15.75 pt;35.25 pt;"/>
+<node TEXT="The requirements for the program to be successful would be that firstly, programming elements described are implemented properly, secondly, being that the program is able to successfully save, retrieve, and edit the data structures described." ID="ID_572044311" CREATED="1675399072922" MODIFIED="1689897174959">
+<arrowlink DESTINATION="ID_904142471" STARTINCLINATION="-126.75 pt;-28.5 pt;" ENDINCLINATION="-15 pt;35.25 pt;"/>
+<arrowlink DESTINATION="ID_576082470" STARTINCLINATION="-204.74999 pt;-47.25 pt;" ENDINCLINATION="-78 pt;3.75 pt;"/>
 </node>
 </node>
 <node TEXT="Problem and Solutions" ID="ID_1380890512" CREATED="1675381190896" MODIFIED="1677541217170">
