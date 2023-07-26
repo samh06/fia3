@@ -44,7 +44,6 @@ class DataStore:
             end_index = patient[0].find("]")
 
             id = int(patient[0][start_index+1:end_index])
-            print(id)
 
         if mode == "update":
             self.update_patient(id, patient)
@@ -150,3 +149,78 @@ WHERE id = :id;''', {"id": id})
         self.cursor.execute('''DELETE FROM type
 WHERE id = :id;''', {"id": id})
         self.db.commit()
+
+    #############################################
+    ########## TAKEN ############################
+    #############################################
+
+    def retrieve_patient_appointments(self, id):
+        self.cursor.execute("""
+    SELECT appointment.*
+    FROM appointment
+    INNER JOIN patient ON appointment.patientid = patient.id
+    WHERE patient.id = :id
+""", {"id": id})
+        return self.cursor.fetchall()
+
+    def get_(self, app_id):
+        self.cursor.execute('''
+        SELECT type.code
+        FROM type
+        JOIN appointmenttype ON type.id = appointmenttype.type_id
+        JOIN appointment ON appointment.id = appointmenttype.appointment_id
+        WHERE appointment.id = :id
+    ''', {"id": app_id})
+        return self.cursor.fetchall()
+
+    def retrieve_app(self, index: str | int, tests):
+        id = self.return_id(index)
+
+        app = self.retrieve_patient_appointments(id)
+
+        for patient in app:
+            if tests == patient[0]:
+                return patient
+        return app[0]
+
+    def retrieve_app_tests(self, index: str | int):
+
+        id: int
+        if type(index) == int:
+            id = index
+        else:
+            start_index = index.find("[")
+            end_index = index.find("]")
+
+            id = int(index[start_index+1:end_index])
+
+        app = self.retrieve_tests(id)
+
+        for patient in app:
+            if id == patient[0]:
+                return patient
+        return app[0]
+
+    def retrieve_tests(self, app_id):
+        self.cursor.execute("""
+            SELECT type.*
+            FROM type
+            INNER JOIN appointmenttype ON type.id = appointmenttype.type_id
+            WHERE appointmenttype.appointment_id = :id
+        """, {'id': app_id})
+        return self.cursor.fetchall()
+
+    def return_id(self, index: str | int):
+        try:
+            id: int
+            if type(index) == int:
+                id = index
+            else:
+                start_index = index.find("[")
+                end_index = index.find("]")
+
+                id = int(index[start_index+1:end_index])
+        except ValueError:
+            return False
+
+        return id

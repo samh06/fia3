@@ -310,6 +310,9 @@ class Ui_MainWindow(object):
         self.taken_2_results_info = QtWidgets.QLabel(self.taken_2_content)
         self.taken_2_results_info.setGeometry(QtCore.QRect(70, 200, 141, 16))
         self.taken_2_results_info.setObjectName("taken_2_results_info")
+        self.taken_2_tests_info = QtWidgets.QLabel(self.taken_2_content)
+        self.taken_2_tests_info.setGeometry(QtCore.QRect(60, 240, 141, 16))
+        self.taken_2_tests_info.setObjectName("taken_2_tests_info")
         self.content.addWidget(self.taken_2_content)
         self.taken_5_content = QtWidgets.QWidget()
         self.taken_5_content.setObjectName("taken_5_content")
@@ -398,8 +401,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.sideBar.setCurrentIndex(2)
-        self.content.setCurrentIndex(5)
+        self.sideBar.setCurrentIndex(0)
+        self.content.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -454,6 +457,7 @@ class Ui_MainWindow(object):
         self.taken_2_code_info.setText(_translate("MainWindow", "Text Code:"))
         self.taken_2_date_info.setText(_translate("MainWindow", "Date:"))
         self.taken_2_results_info.setText(_translate("MainWindow", "Results:"))
+        self.taken_2_tests_info.setText(_translate("MainWindow", "Results:"))
         self.label_3.setText(_translate("MainWindow", "Taken_3"))
         self.types_1_content_title.setText(_translate("MainWindow", "Add or Edit Test Types"))
         self.types_1_update_button.setText(_translate("MainWindow", "PushButton"))
