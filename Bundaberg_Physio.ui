@@ -359,8 +359,11 @@
       <height>501</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="home_content">
      <widget class="QLabel" name="home_content_title">
@@ -1024,6 +1027,78 @@
       </property>
       <property name="text">
        <string>Taken_3</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="taken_3_name_combo">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>180</y>
+        <width>191</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="taken_3_test_combo">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>250</y>
+        <width>201</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>100</y>
+        <width>260</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QRadioButton" name="taken_3_insert_radio">
+         <property name="text">
+          <string>Insert</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="taken_3_remove_radio">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QComboBox" name="taken_3_type_combo">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>310</y>
+        <width>201</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="taken_3_update_button">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>290</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PushButton</string>
       </property>
      </widget>
     </widget>

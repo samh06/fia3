@@ -107,14 +107,7 @@ WHERE id = :id;''', {"id": id})
         return tests[0]
 
     def types_push_to_db(self, type: list, mode: str):
-        id: int
-        if type(type[0]) == int:
-            id = type[0]
-        else:
-            start_index = type[0].find("[")
-            end_index = type[0].find("]")
-
-            id = int(type[0][start_index+1:end_index])
+        id = self.return_id(type[0])
 
         if mode == "update":
             self.update_type(id, type)
@@ -124,24 +117,25 @@ WHERE id = :id;''', {"id": id})
             self.remove_type(id)
 
     def update_type(self, id, type):
+        print(id)
         self.cursor.execute("""
                     UPDATE Type
                     SET
                         code = :code,
                         name = :name,
                         desc = :desc,
-                        cost = :cost
+                        price = :price
                     WHERE
                         id = :id;
-                                    """, {"id": id, "code": type[1], "name": type[2],
-                                          "desc": type[3], "cost": type[4]})
+                                    """, {"id": id, "code": type[2], "name": type[1],
+                                          "desc": type[3], "price": type[4]})
         self.db.commit()
 
     def insert_type(self, type):
         self.cursor.execute("""
             INSERT INTO type (code, name, desc, price)
             VALUES (:code, :name, :desc, :price)""",
-                            {"code": type[1], "name": type[2],
+                            {"code": type[2], "name": type[1],
                              "desc": type[3], "price": type[4]})
         self.db.commit()
 
@@ -207,7 +201,7 @@ WHERE id = :id;''', {"id": id})
             FROM type
             INNER JOIN appointmenttype ON type.id = appointmenttype.type_id
             WHERE appointmenttype.appointment_id = :id
-        """, {'id': app_id})
+        """, {'id': self.return_id(app_id)})
         return self.cursor.fetchall()
 
     def return_id(self, index: str | int):
@@ -224,3 +218,14 @@ WHERE id = :id;''', {"id": id})
             return False
 
         return id
+
+    def add_new_test_taken(self, app_id: int, type_id: int):
+        self.cursor.execute(
+            'INSERT INTO appointmenttype (appointment_id, type_id) VALUES (:app_id, :typeid)', {'app_id': app_id, "typeid": type_id})
+        self.db.commit()
+
+    def remove_test_taken(self, type_id: int):
+        self.cursor.execute(
+            'DELETE FROM appointmenttype WHERE type_id = :typeid AND rowid IN (SELECT rowid FROM appointmenttype WHERE type_id = :typeid LIMIT 1)', {'typeid': type_id})
+
+        self.db.commit()

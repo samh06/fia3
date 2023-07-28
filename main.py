@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
+from PyQt5.QtCore import QFile, QTextStream
 
 from datastore import DataStore
 from Ui_Generated import Ui_MainWindow
@@ -23,6 +24,10 @@ class MainWindow():
             self.types_2_combobox)
         self.ui.taken_name_combo.currentIndexChanged.connect(
             self.taken_2_combobox_name)
+        self.ui.taken_3_name_combo.currentIndexChanged.connect(
+            self.taken_3_combobox_name)
+        self.ui.taken_3_test_combo.currentIndexChanged.connect(
+            lambda *args, b=False: self.taken_3_combobox_app(reset=b))
         self.ui.taken_test_combo.currentIndexChanged.connect(
             lambda *args, b=False: self.taken_2_combobox_app(reset=b))
 
@@ -40,8 +45,17 @@ class MainWindow():
         self.ui.patient_1_update_radio.clicked.connect(
             self.patient_1_radio_clicked)
 
+        self.ui.taken_3_insert_radio.clicked.connect(
+            self.taken_3_types_combobox)
+        self.ui.taken_3_remove_radio.clicked.connect(
+            self.taken_3_types_combobox)
+
+        self.ui.taken_3_update_button.clicked.connect(
+            self.taken_3_update_button)
+
         self.ui.patient_1_update_button.pressed.connect(
             self.update_patient_1_data)
+        self.ui.types_1_update_button.pressed.connect(self.update_types_1_data)
 
         self.connect_menu()
         self.connect_side()
@@ -53,6 +67,8 @@ class MainWindow():
         self.types_1_combobox()
         self.types_2_combobox()
         self.taken_2_combobox_name()
+        self.taken_3_combobox_name()
+        self.taken_3_types_combobox()
 
     #############################################
     ########## MENUBAR ##########################
@@ -364,11 +380,156 @@ class MainWindow():
         self.ui.taken_2_results_info.setText(f"Results: {patient[3]}")
         self.ui.taken_2_tests_info.setText(performed_tests)
 
-        # self.ui.taken_2_tests_info.setText(f)
-
     #############################################
     ########## TAKEN 3 ######(New Test)##########
     #############################################
+
+    def taken_3_combobox_name(self):
+
+        # Retrieve the list of patients from the data store.
+        patients = self.data_store.retrieve_patients()
+
+        # Get the currently selected patient name from 'taken_3_name_combo'.
+        current_text_patient = self.ui.taken_3_name_combo.currentText()
+
+        # Block signals during the update process to prevent unnecessary signals from being emitted.
+        self.ui.taken_3_name_combo.blockSignals(True)
+
+        # Clear the contents of 'taken_3_name_combo'.
+        self.ui.taken_3_name_combo.clear()
+
+        # Construct a list of formatted patient items in the form "[Patient ID] Patient Name".
+        patient_list = [
+            f"[{patient[0]}] {patient[1]}" for patient in patients]
+
+        # Add the items to 'taken_3_name_combo' all at once.
+        self.ui.taken_3_name_combo.addItems(patient_list)
+
+        # Set the previously selected patient if it still exists in the updated combo box items.
+        index = self.ui.taken_3_name_combo.findText(current_text_patient)
+        if index != -1:
+            # If the previous selection exists in the updated combo box items,
+            # set the current index to the previous selection.
+            self.ui.taken_3_name_combo.setCurrentIndex(index)
+        else:
+            # If the previous selection no longer exists in the updated combo box items,
+            # show an error popup if not resetting and set the current index to the first item.
+            if self.ui.content.currentWidget() != self.ui.home_content:
+                self.show_error_popup(
+                    "Selected value no longer in database, please try again.")
+            self.ui.taken_3_name_combo.setCurrentIndex(0)
+
+        # Call 'taken_2_combobox_app' function with 'reset' set to True to update 'taken_test_combo'.
+        self.taken_3_combobox_app(reset=True)
+
+        # Re-enable the signal for 'taken_name_combo'.
+        self.ui.taken_3_name_combo.blockSignals(False)
+
+    def taken_3_combobox_app(self, reset=False):
+
+        # Retrieve the patient's appointments from the data store based on the selected patient name.
+        appointments = self.data_store.retrieve_patient_appointments(
+            self.data_store.return_id(self.ui.taken_3_name_combo.currentText()))
+
+        # Get the currently selected text from 'taken_test_combo'.
+        current_text = self.ui.taken_3_test_combo.currentText()
+
+        # Block signals during the update process to prevent unnecessary signals from being emitted.
+        self.ui.taken_3_test_combo.blockSignals(True)
+
+        # Clear the contents of 'taken_test_combo'.
+        self.ui.taken_3_test_combo.clear()
+
+        # Construct a list of formatted patient items in the form "[Patient ID] Patient Name".
+        appointment_list = [
+            f"[{patient[0]}] {patient[2]}" for patient in appointments]
+
+        # Add the items to 'taken_test_combo' all at once.
+        self.ui.taken_3_test_combo.addItems(appointment_list)
+
+        # Set the previously selected item if it still exists in the new items.
+        index = self.ui.taken_3_test_combo.findText(current_text)
+        if index != -1 and not reset:
+            # If the previous selection exists in the updated combo box items and 'reset' is False,
+            # set the current index to the previous selection.
+            self.ui.taken_3_test_combo.setCurrentIndex(index)
+            app_id = self.data_store.return_id(current_text)
+
+            if app_id == False:
+                self.show_error_popup(
+                    "There is no tests available for this patient.")
+            # else:
+            #     # Fetch the details of the selected appointment and associated tests.
+            #     self.change_taken_3_text(
+            #         self.data_store.retrieve_app(
+            #             self.ui.taken_3_name_combo.currentText(), app_id),
+            #         self.data_store.retrieve_tests(current_text)
+            #     )
+        else:
+            # If the previous selection no longer exists in the updated combo box items,
+            # show an error popup if not resetting and set the current index to the first item.
+            if self.ui.content.currentWidget() != self.ui.home_content and not reset:
+                self.show_error_popup(
+                    "Selected value no longer in database, please try again.")
+            self.ui.taken_3_test_combo.setCurrentIndex(0)
+
+            app_id = self.data_store.return_id(
+                self.ui.taken_3_test_combo.currentText())
+            if app_id == False:
+                self.show_error_popup(
+                    "There is no tests available for this patient.")
+            # else:
+            #     # Fetch the details of the first appointment and its associated tests.
+            #     self.change_taken_3_text(
+            #         self.data_store.retrieve_app(
+            #             self.ui.taken_3_name_combo.currentText(), app_id),
+            #         self.data_store.retrieve_tests(
+            #             self.ui.taken_3_test_combo.currentText())
+            #
+
+        self.taken_3_types_combobox()
+        # Re-enable the signal
+        self.ui.taken_3_test_combo.blockSignals(False)
+
+    def taken_3_types_combobox(self):
+        if self.ui.taken_3_insert_radio.isChecked():
+            types = self.data_store.retrieve_types()
+        else:
+            types = self.data_store.retrieve_tests(
+                self.ui.taken_3_test_combo.currentText())
+        current_text = self.ui.taken_3_type_combo.currentText()
+
+        # Block signals during the update process
+        self.ui.taken_3_type_combo.blockSignals(True)
+
+        self.ui.taken_3_type_combo.clear()
+
+        # Construct a list of patient items
+        patient_items = [
+            f"[{type[0]}] {type[1]}" for type in types]
+
+        # Add the items to the combo box all at once
+        self.ui.taken_3_type_combo.addItems(patient_items)
+
+        # Set the previously selected item if it still exists in the new items
+        index = self.ui.taken_3_type_combo.findText(current_text)
+        if index != -1:
+            self.ui.taken_3_type_combo.setCurrentIndex(index)
+        else:
+            self.ui.taken_3_type_combo.setCurrentIndex(0)
+
+        # Re-enable the signal
+        self.ui.taken_3_type_combo.blockSignals(False)
+
+    def taken_3_update_button(self):
+        if self.ui.taken_3_insert_radio.isChecked():
+            self.data_store.add_new_test_taken(self.data_store.return_id(self.ui.taken_3_test_combo.currentText()), self.data_store.return_id(
+                self.ui.taken_3_type_combo.currentText()))
+        else:
+            self.data_store.remove_test_taken(self.data_store.return_id(
+                self.ui.taken_3_type_combo.currentText()))
+            # for type in self.data_store.retrieve_type(self.ui.taken)
+        self.taken_3_types_combobox()
 
     #############################################
     ########## TYPES 1 ##########################
@@ -430,7 +591,7 @@ class MainWindow():
         self.ui.types_1_price_edit.setText(str(patient[4]))
 
     def update_types_1_data(self):
-        type = [self.ui.patient_1_combo_autofill.currentText(),
+        type = [self.ui.types_1_combo_autofill.currentText(),
                 self.ui.types_1_name_edit.text(),
                 self.ui.types_1_code_edit.text(),
                 self.ui.types_1_description_edit.toPlainText(),
@@ -445,7 +606,7 @@ class MainWindow():
         # Check which radio button is checked
         for radio_button, mode in radio_button_modes.items():
             if radio_button.isChecked():
-                self.data_store.type_push_to_db(patient=type, mode=mode)
+                self.data_store.types_push_to_db(type=type, mode=mode)
                 self.types_1_combobox()
 
     #############################################
