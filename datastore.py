@@ -22,28 +22,14 @@ class DataStore:
 
     def retrieve_patient(self, index: str | int):
         patients = self.retrieve_patients()
-        id: int
-        if type(index) == int:
-            id = index
-        else:
-            start_index = index.find("[")
-            end_index = index.find("]")
-
-            id = int(index[start_index+1:end_index])
+        id = self.return_id(index)
         for patient in patients:
             if id == patient[0]:
                 return patient
         return patients[0]
 
     def patient_push_to_db(self, patient: list, mode: str):
-        id: int
-        if type(patient[0]) == int:
-            id = patient[0]
-        else:
-            start_index = patient[0].find("[")
-            end_index = patient[0].find("]")
-
-            id = int(patient[0][start_index+1:end_index])
+        id = self.return_id(patient[0])
 
         if mode == "update":
             self.update_patient(id, patient)
@@ -93,14 +79,7 @@ WHERE id = :id;''', {"id": id})
 
     def retrieve_type(self, index: str | int):
         tests = self.retrieve_types()
-        id: int
-        if type(index) == int:
-            id = index
-        else:
-            start_index = index.find("[")
-            end_index = index.find("]")
-
-            id = int(index[start_index+1:end_index])
+        id = self.return_id(index)
         for test in tests:
             if id == test[0]:
                 return test
@@ -148,14 +127,53 @@ WHERE id = :id;''', {"id": id})
     ########## TAKEN ############################
     #############################################
 
+    def taken_push_to_db(self, app: list, mode: str):
+        id = self.return_id(app[0])
+
+        if mode == "update":
+            self.update_app(id, app)
+        elif mode == "insert":
+            self.insert_app(app)
+        else:
+            self.remove_app(id)
+
+    def update_app(self, id, patient):
+        self.cursor.execute("""
+                    UPDATE Appointment
+                    SET
+                        patientid = :pid,
+                        date = :date,
+                        result = :result,
+                        paid = :paid
+                    WHERE
+                        id = :id;
+                                    """, {"id": id, "pid": patient[1], "date": patient[2],
+                                          "result": patient[3], "paid": patient[4]})
+        self.db.commit()
+
+    def insert_app(self, patient):
+        self.cursor.execute("""
+            INSERT INTO appointment (patientid, date, result, paid)
+            VALUES (:pid, :date, :result, :paid)""",
+                            {"pid": patient[1], "date": patient[2],
+                             "result": patient[3], "paid": patient[4]})
+        self.db.commit()
+
+    def remove_app(self, id):
+        self.cursor.execute('''DELETE FROM appointment
+WHERE id = :id;''', {"id": id})
+        self.db.commit()
+
     def retrieve_patient_appointments(self, id):
+        id = int(id)
         self.cursor.execute("""
     SELECT appointment.*
     FROM appointment
     INNER JOIN patient ON appointment.patientid = patient.id
     WHERE patient.id = :id
 """, {"id": id})
-        return self.cursor.fetchall()
+        codesucks = self.cursor.fetchall()
+        return codesucks
 
     def get_(self, app_id):
         self.cursor.execute('''
@@ -179,14 +197,7 @@ WHERE id = :id;''', {"id": id})
 
     def retrieve_app_tests(self, index: str | int):
 
-        id: int
-        if type(index) == int:
-            id = index
-        else:
-            start_index = index.find("[")
-            end_index = index.find("]")
-
-            id = int(index[start_index+1:end_index])
+        id = self.return_id(index)
 
         app = self.retrieve_tests(id)
 

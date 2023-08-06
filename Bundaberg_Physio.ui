@@ -363,7 +363,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="home_content">
      <widget class="QLabel" name="home_content_title">
@@ -776,8 +776,8 @@
      <widget class="QComboBox" name="taken_1_name_combo">
       <property name="geometry">
        <rect>
-        <x>140</x>
-        <y>110</y>
+        <x>500</x>
+        <y>120</y>
         <width>191</width>
         <height>22</height>
        </rect>
@@ -786,8 +786,8 @@
      <widget class="QLabel" name="taken_1_patient_info">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>110</y>
+        <x>450</x>
+        <y>120</y>
         <width>161</width>
         <height>16</height>
        </rect>
@@ -801,12 +801,12 @@
        <rect>
         <x>60</x>
         <y>150</y>
-        <width>141</width>
+        <width>31</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Text Code:</string>
+       <string>Paid:</string>
       </property>
      </widget>
      <widget class="QLabel" name="taken_1_date_info">
@@ -855,16 +855,6 @@
        </rect>
       </property>
      </widget>
-     <widget class="QComboBox" name="taken_1_test_code_combo">
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>150</y>
-        <width>191</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
@@ -883,7 +873,7 @@
        <rect>
         <x>0</x>
         <y>-10</y>
-        <width>561</width>
+        <width>711</width>
         <height>61</height>
        </rect>
       </property>
@@ -893,7 +883,66 @@
        </font>
       </property>
       <property name="text">
-       <string>Add Test Taken</string>
+       <string>Edit or Remove Appointments</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>80</y>
+        <width>260</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QRadioButton" name="taken_1_insert_radio">
+         <property name="text">
+          <string>Insert</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="taken_1_update_radio">
+         <property name="text">
+          <string>Update</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="taken_1_remove_radio">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QCheckBox" name="taken_1_paid_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>150</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="taken_1_combo_autofill">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>180</y>
+        <width>191</width>
+        <height>22</height>
+       </rect>
       </property>
      </widget>
     </widget>

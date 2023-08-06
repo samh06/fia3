@@ -26,6 +26,10 @@ class MainWindow():
             self.taken_2_combobox_name)
         self.ui.taken_3_name_combo.currentIndexChanged.connect(
             self.taken_3_combobox_name)
+        self.ui.taken_1_combo_autofill.currentIndexChanged.connect(
+            self.taken_1_combobox)
+        self.ui.taken_1_name_combo.currentIndexChanged.connect(
+            self.taken_1_combobox)
         self.ui.taken_3_test_combo.currentIndexChanged.connect(
             lambda *args, b=False: self.taken_3_combobox_app(reset=b))
         self.ui.taken_test_combo.currentIndexChanged.connect(
@@ -45,6 +49,13 @@ class MainWindow():
         self.ui.patient_1_update_radio.clicked.connect(
             self.patient_1_radio_clicked)
 
+        self.ui.taken_1_insert_radio.clicked.connect(
+            self.taken_1_radio_clicked)
+        self.ui.taken_1_remove_radio.clicked.connect(
+            self.taken_1_radio_clicked)
+        self.ui.taken_1_update_radio.clicked.connect(
+            self.taken_1_radio_clicked)
+
         self.ui.taken_3_insert_radio.clicked.connect(
             self.taken_3_types_combobox)
         self.ui.taken_3_remove_radio.clicked.connect(
@@ -56,6 +67,7 @@ class MainWindow():
         self.ui.patient_1_update_button.pressed.connect(
             self.update_patient_1_data)
         self.ui.types_1_update_button.pressed.connect(self.update_types_1_data)
+        self.ui.pushButton.clicked.connect(self.update_taken_1_data)
 
         self.connect_menu()
         self.connect_side()
@@ -69,6 +81,8 @@ class MainWindow():
         self.taken_2_combobox_name()
         self.taken_3_combobox_name()
         self.taken_3_types_combobox()
+        self.taken_1_combobox()
+        self.taken_1_radio_clicked()
 
     #############################################
     ########## MENUBAR ##########################
@@ -251,6 +265,101 @@ class MainWindow():
     #############################################
     ########## TAKEN 1 ###########(New App)######
     #############################################
+
+    def taken_1_radio_clicked(self):
+        taken_insert_enabled = self.ui.taken_1_insert_radio.isChecked()
+        taken_remove_enabled = self.ui.taken_1_remove_radio.isChecked()
+
+        self.ui.taken_1_combo_autofill.setDisabled(taken_insert_enabled)
+        self.ui.taken_1_name_combo.setDisabled(taken_remove_enabled)
+        self.ui.taken_1_paid_checkBox.setDisabled(taken_remove_enabled)
+        self.ui.taken_1_date_edit.setDisabled(taken_remove_enabled)
+        self.ui.taken_1_results_edit.setDisabled(taken_remove_enabled)
+
+        self.change_taken_1_edits([], True) if taken_insert_enabled else self.change_taken_1_edits(
+            self.data_store.retrieve_patient(self.ui.taken_1_name_combo.currentText()))
+
+    def taken_1_combobox(self):
+        patients = self.data_store.retrieve_patients()
+        current_text_patient = self.ui.taken_1_name_combo.currentText()
+        current_text_appointment = self.ui.taken_1_combo_autofill.currentText()
+
+        # Block signals during the update process
+        self.ui.taken_1_combo_autofill.blockSignals(True)
+        self.ui.taken_1_name_combo.blockSignals(True)
+
+        self.ui.taken_1_combo_autofill.clear()
+        self.ui.taken_1_name_combo.clear()
+
+        # Construct a list of patient items
+        patient_items = [
+            f"[{patient[0]}] {patient[1]}" for patient in patients]
+
+        # Add the items to the combo box all at once
+        self.ui.taken_1_name_combo.addItems(patient_items)
+
+        # Set the previously selected item if it still exists in the new items
+        index = self.ui.taken_1_name_combo.findText(current_text_patient)
+
+        appointments = self.data_store.retrieve_patient_appointments(
+            self.data_store.return_id(patient_items[0] if index == -1 else self.ui.taken_1_name_combo.itemText(index)))
+        print("app", appointments)
+
+        app_items = [
+            f"[{patient[0]}] {patient[2]}" for patient in appointments]
+
+        self.ui.taken_1_combo_autofill.addItems(app_items)
+
+        index_app = self.ui.taken_1_combo_autofill.findText(
+            current_text_appointment)
+
+        if index != -1 and index_app != -1:
+            self.ui.taken_1_name_combo.setCurrentIndex(index)
+            self.ui.taken_1_combo_autofill.setCurrentIndex(index_app)
+            self.change_taken_1_edits(
+                appointments[index_app])
+        else:
+            if self.ui.content.currentWidget() != self.ui.home_content:
+                if self.ui.taken_1_remove_radio.isChecked():
+                    self.show_error_popup("Successfully deleted patient")
+                else:
+                    self.show_error_popup(
+                        "Selected value no longer in database, please try again.")
+                self.ui.taken_1_name_combo.setCurrentIndex(0)
+                self.ui.taken_1_combo_autofill.setCurrentIndex(0)
+            self.change_taken_1_edits(appointments[0])
+
+        # Re-enable the signal
+        self.ui.taken_1_combo_autofill.blockSignals(False)
+        self.ui.taken_1_name_combo.blockSignals(False)
+
+    def change_taken_1_edits(self, patient, clear=False):
+        print(patient)
+        if clear:
+            patient = ["", "", "", "", "", "", "",]
+        self.ui.taken_1_date_edit.setText(patient[2])
+        self.ui.taken_1_results_edit.setText(patient[3])
+        self.ui.taken_1_paid_checkBox.setChecked(bool(patient[4]))
+
+    def update_taken_1_data(self):
+        app = [self.data_store.return_id(self.ui.taken_1_combo_autofill.currentText()),
+               self.data_store.return_id(
+            self.ui.taken_1_name_combo.currentText()),
+            self.ui.taken_1_date_edit.text(),
+            self.ui.taken_1_results_edit.text(),
+            int(self.ui.taken_1_paid_checkBox.isChecked())]
+
+        radio_button_modes = {
+            self.ui.taken_1_insert_radio: "insert",
+            self.ui.taken_1_update_radio: "update",
+            self.ui.taken_1_remove_radio: "remove"
+        }
+
+        # Check which radio button is checked
+        for radio_button, mode in radio_button_modes.items():
+            if radio_button.isChecked():
+                self.data_store.taken_push_to_db(app=app, mode=mode)
+                self.taken_1_combobox()
 
     #############################################
     ########## TAKEN 2 ##########(View App)######
