@@ -363,7 +363,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="home_content">
      <widget class="QLabel" name="home_content_title">
@@ -430,20 +430,10 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLineEdit" name="patient_1_studnum_edit">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>110</y>
-        <width>113</width>
-        <height>20</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="patient_1_DOB_edit">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>60</x>
         <y>150</y>
         <width>113</width>
         <height>20</height>
@@ -453,7 +443,7 @@
      <widget class="QLineEdit" name="patient_1_post_edit">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>60</x>
         <y>250</y>
         <width>113</width>
         <height>20</height>
@@ -480,7 +470,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Update</string>
       </property>
      </widget>
      <widget class="QWidget" name="layoutWidget">
@@ -532,7 +522,7 @@
      <widget class="QLineEdit" name="patient_1_add_edit">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>60</x>
         <y>200</y>
         <width>341</width>
         <height>20</height>
@@ -542,7 +532,7 @@
      <widget class="QLineEdit" name="patient_1_wei_edit">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>60</x>
         <y>330</y>
         <width>113</width>
         <height>20</height>
@@ -557,6 +547,102 @@
         <width>113</width>
         <height>20</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>41</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Name:</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DOB:</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>200</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Address:</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>250</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Postcode:</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>290</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Height:</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>330</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Weight:</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -1065,19 +1151,6 @@
      </widget>
     </widget>
     <widget class="QWidget" name="taken_5_content">
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>100</y>
-        <width>47</width>
-        <height>13</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Taken_3</string>
-      </property>
-     </widget>
      <widget class="QComboBox" name="taken_3_name_combo">
       <property name="geometry">
        <rect>
@@ -1140,14 +1213,71 @@
      <widget class="QPushButton" name="taken_3_update_button">
       <property name="geometry">
        <rect>
-        <x>280</x>
-        <y>290</y>
+        <x>220</x>
+        <y>260</y>
         <width>75</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Update</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_content_title_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>561</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>36</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Add Tests Taken</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_2">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>180</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Patient:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_3">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>250</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Appointment:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_4">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>310</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Test:</string>
       </property>
      </widget>
     </widget>
@@ -1196,9 +1326,9 @@
      <widget class="QLineEdit" name="types_1_name_edit">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>60</x>
         <y>150</y>
-        <width>113</width>
+        <width>171</width>
         <height>20</height>
        </rect>
       </property>
@@ -1206,8 +1336,8 @@
      <widget class="QLineEdit" name="types_1_price_edit">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>250</y>
+        <x>60</x>
+        <y>260</y>
         <width>113</width>
         <height>20</height>
        </rect>
@@ -1233,7 +1363,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Update</string>
       </property>
      </widget>
      <widget class="QPlainTextEdit" name="types_1_description_edit">
@@ -1281,6 +1411,58 @@
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Code:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Name:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_7">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>190</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Description:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="taken_2_patient_info_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cost:</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="types_2_content">

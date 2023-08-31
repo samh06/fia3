@@ -96,7 +96,6 @@ WHERE id = :id;''', {"id": id})
             self.remove_type(id)
 
     def update_type(self, id, type):
-        print(id)
         self.cursor.execute("""
                     UPDATE Type
                     SET

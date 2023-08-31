@@ -143,7 +143,6 @@ class MainWindow():
 
         self.ui.patient_1_combo_autofill.setDisabled(patient_insert_enabled)
         self.ui.patient_1_name_edit.setDisabled(patient_remove_enabled)
-        self.ui.patient_1_studnum_edit.setDisabled(patient_remove_enabled)
         self.ui.patient_1_DOB_edit.setDisabled(patient_remove_enabled)
         self.ui.patient_1_add_edit.setDisabled(patient_remove_enabled)
         self.ui.patient_1_post_edit.setDisabled(patient_remove_enabled)
@@ -178,10 +177,7 @@ class MainWindow():
         else:
             if self.ui.content.currentWidget() != self.ui.home_content:
                 if self.ui.patient_1_remove_radio.isChecked():
-                    self.show_error_popup("Successfully deleted patient")
-                else:
-                    self.show_error_popup(
-                        "Selected value no longer in database, please try again.")
+                    self.show_error_popup("Successfully deleted patient", True)
                 self.ui.patient_1_combo_autofill.setCurrentIndex(0)
 
         # Re-enable the signal
@@ -215,8 +211,15 @@ class MainWindow():
         # Check which radio button is checked
         for radio_button, mode in radio_button_modes.items():
             if radio_button.isChecked():
-                self.data_store.patient_push_to_db(patient=patient, mode=mode)
+                if radio_button == self.ui.patient_1_remove_radio:
+                    ret = QMessageBox.question(
+                        None, '', 'Are you sure to reset all the values?', QMessageBox.Yes | QMessageBox.No)
+                    if ret == QMessageBox.No:
+                        break
+                self.data_store.patient_push_to_db(
+                    patient=patient, mode=mode)
                 self.patient_1_combobox()
+                self.patient_2_combobox()
 
     #############################################
     ########## PATIENT 2 ########################
@@ -245,9 +248,7 @@ class MainWindow():
             self.change_patient_2_text(
                 self.data_store.retrieve_patient(current_text))
         else:
-            if self.ui.content.currentWidget() != self.ui.home_content:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
+
             self.ui.comboBox.setCurrentIndex(0)
             self.change_patient_2_text(self.data_store.retrieve_patient(0))
 
@@ -303,7 +304,6 @@ class MainWindow():
 
         appointments = self.data_store.retrieve_patient_appointments(
             self.data_store.return_id(patient_items[0] if index == -1 else self.ui.taken_1_name_combo.itemText(index)))
-        print("app", appointments)
 
         app_items = [
             f"[{patient[0]}] {patient[2]}" for patient in appointments]
@@ -321,10 +321,8 @@ class MainWindow():
         else:
             if self.ui.content.currentWidget() != self.ui.home_content:
                 if self.ui.taken_1_remove_radio.isChecked():
-                    self.show_error_popup("Successfully deleted patient")
-                else:
                     self.show_error_popup(
-                        "Selected value no longer in database, please try again.")
+                        "Successfully deleted appointment", True)
                 self.ui.taken_1_name_combo.setCurrentIndex(0)
                 self.ui.taken_1_combo_autofill.setCurrentIndex(0)
             self.change_taken_1_edits(appointments[0])
@@ -334,7 +332,6 @@ class MainWindow():
         self.ui.taken_1_name_combo.blockSignals(False)
 
     def change_taken_1_edits(self, patient, clear=False):
-        print(patient)
         if clear:
             patient = ["", "", "", "", "", "", "",]
         self.ui.taken_1_date_edit.setText(patient[2])
@@ -358,8 +355,17 @@ class MainWindow():
         # Check which radio button is checked
         for radio_button, mode in radio_button_modes.items():
             if radio_button.isChecked():
+                if radio_button == self.ui.taken_1_remove_radio:
+                    ret = QMessageBox.question(
+                        None, '', 'Are you sure to reset all the values?', QMessageBox.Yes | QMessageBox.No)
+                    if ret == QMessageBox.No:
+                        break
                 self.data_store.taken_push_to_db(app=app, mode=mode)
                 self.taken_1_combobox()
+                self.taken_2_combobox_name()
+                self.taken_2_combobox_app()
+                self.taken_3_combobox_name()
+                self.taken_3_combobox_app()
 
     #############################################
     ########## TAKEN 2 ##########(View App)######
@@ -398,9 +404,7 @@ class MainWindow():
         else:
             # If the previous selection no longer exists in the updated combo box items,
             # show an error popup if not resetting and set the current index to the first item.
-            if self.ui.content.currentWidget() != self.ui.home_content:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
+
             self.ui.taken_name_combo.setCurrentIndex(0)
 
         # Call 'taken_2_combobox_app' function with 'reset' set to True to update 'taken_test_combo'.
@@ -454,9 +458,6 @@ class MainWindow():
         else:
             # If the previous selection no longer exists in the updated combo box items,
             # show an error popup if not resetting and set the current index to the first item.
-            if self.ui.content.currentWidget() != self.ui.home_content and not reset:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
             self.ui.taken_test_combo.setCurrentIndex(0)
 
             app_id = self.data_store.return_id(
@@ -523,9 +524,7 @@ class MainWindow():
         else:
             # If the previous selection no longer exists in the updated combo box items,
             # show an error popup if not resetting and set the current index to the first item.
-            if self.ui.content.currentWidget() != self.ui.home_content:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
+
             self.ui.taken_3_name_combo.setCurrentIndex(0)
 
         # Call 'taken_2_combobox_app' function with 'reset' set to True to update 'taken_test_combo'.
@@ -577,9 +576,6 @@ class MainWindow():
         else:
             # If the previous selection no longer exists in the updated combo box items,
             # show an error popup if not resetting and set the current index to the first item.
-            if self.ui.content.currentWidget() != self.ui.home_content and not reset:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
             self.ui.taken_3_test_combo.setCurrentIndex(0)
 
             app_id = self.data_store.return_id(
@@ -635,10 +631,13 @@ class MainWindow():
             self.data_store.add_new_test_taken(self.data_store.return_id(self.ui.taken_3_test_combo.currentText()), self.data_store.return_id(
                 self.ui.taken_3_type_combo.currentText()))
         else:
+
             self.data_store.remove_test_taken(self.data_store.return_id(
                 self.ui.taken_3_type_combo.currentText()))
             # for type in self.data_store.retrieve_type(self.ui.taken)
         self.taken_3_types_combobox()
+        self.taken_2_combobox_name()
+        self.taken_2_combobox_app()
 
     #############################################
     ########## TYPES 1 ##########################
@@ -682,10 +681,7 @@ class MainWindow():
         else:
             if self.ui.content.currentWidget() != self.ui.home_content:
                 if self.ui.types_1_remove_radio.isChecked():
-                    self.show_error_popup("Successfully deleted patient")
-                else:
-                    self.show_error_popup(
-                        "Selected value no longer in database, please try again.")
+                    self.show_error_popup("Successfully deleted test", True)
                 self.ui.types_1_combo_autofill.setCurrentIndex(0)
 
         # Re-enable the signal
@@ -715,8 +711,14 @@ class MainWindow():
         # Check which radio button is checked
         for radio_button, mode in radio_button_modes.items():
             if radio_button.isChecked():
+                if radio_button == self.ui.types_1_remove_radio:
+                    ret = QMessageBox.question(
+                        None, '', 'Are you sure to reset all the values?', QMessageBox.Yes | QMessageBox.No)
+                    if ret == QMessageBox.No:
+                        break
                 self.data_store.types_push_to_db(type=type, mode=mode)
                 self.types_1_combobox()
+                self.types_2_combobox()
 
     #############################################
     ########## TYPES 2 ##########################
@@ -745,9 +747,7 @@ class MainWindow():
             self.change_type_2_text(
                 self.data_store.retrieve_type(current_text))
         else:
-            if self.ui.content.currentWidget() != self.ui.home_content:
-                self.show_error_popup(
-                    "Selected value no longer in database, please try again.")
+
             self.ui.types_2_code_combobox.setCurrentIndex(0)
             self.change_type_2_text(self.data_store.retrieve_type(0))
 
@@ -765,10 +765,11 @@ class MainWindow():
     #############################################
 
     @staticmethod
-    def show_error_popup(message):
+    def show_error_popup(message, success=False):
         error_popup = QMessageBox()
-        error_popup.setIcon(QMessageBox.Critical)
-        error_popup.setWindowTitle("Error")
+        error_popup.setIcon(
+            QMessageBox.Critical if not success else QMessageBox.Information)
+        error_popup.setWindowTitle("Error" if not success else "Success")
         error_popup.setText(message)
         error_popup.exec_()
 
